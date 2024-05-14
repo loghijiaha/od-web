@@ -12,6 +12,7 @@ const Canvas = () => {
   const [attackSpeed, setAttackSpeed] = useState(2);
   const [defenseSpeed, setDefenseSpeed] = useState(2);
   const [score, setScore] = useState(0);
+  const [fired, setFired] = useState(0);
 
   const handleCanvasClick = event => {
     const canvas = event.target;
@@ -22,6 +23,7 @@ const Canvas = () => {
   };
 
   const createMissile = (x, y) => {
+    setFired(fired +1);
     setMissiles([...missiles, { x, y, width: 10, height: 20, color: 'red', velocity: attackSpeed, angle: attackAngle }]);
     fireDefenseMissile(); // Fire defense missile immediately
   };
@@ -51,7 +53,7 @@ const Canvas = () => {
 
   return (
       <div className="App">
-        <Header score={score} />
+        <Header score={score} fired={fired}/>
         <MissileControls
             attackAngle={attackAngle}
             defenseAngle={defenseAngle}
