@@ -32,12 +32,10 @@ const MissileCanvas = ({
 
             // Update and draw Defense Missiles
             for (let dIndex = defenseMissiles.length - 1; dIndex >= 0; dIndex--) {
-                const defenseMissile = defenseMissiles[dIndex];
-                defenseMissile.x += Math.cos(defenseMissile.angle * Math.PI / 180) * defenseSpeed;
-                defenseMissile.y += Math.sin(defenseMissile.angle * Math.PI / 180) * defenseSpeed + gravity;
+                let defenseMissile = defenseMissiles[dIndex];
+                defenseMissile.updatePosition();
+                defenseMissile.draw(context);
 
-                context.fillStyle = defenseMissile.color;
-                context.fillRect(defenseMissile.x, defenseMissile.y, defenseMissile.width, defenseMissile.height);
 
                 // Check collision with attack missiles
                 for (let aIndex = missiles.length - 1; aIndex >= 0; aIndex--) {
@@ -60,11 +58,8 @@ const MissileCanvas = ({
             // Update and draw Attack Missiles
             for (let aIndex = missiles.length - 1; aIndex >= 0; aIndex--) {
                 const missile = missiles[aIndex];
-                missile.x += Math.cos(missile.angle * Math.PI / 180) * missile.velocity;
-                missile.y += Math.sin(missile.angle * Math.PI / 180) * missile.velocity + gravity;
-
-                context.fillStyle = missile.color;
-                context.fillRect(missile.x, missile.y, missile.width, missile.height);
+                missile.updatePosition();
+                missile.draw(context);
 
                 // Remove missile if it reaches the bottom of the canvas
                 if (missile.y > canvas.height) {

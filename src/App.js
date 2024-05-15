@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './App.css';
 import MissileCanvas from './components/MissileCanvas';
 import MissileControls from './components/MissileControls';
+import Missile from "./components/Missile";
 import Header from './components/Header';
 
 const Canvas = () => {
@@ -24,27 +25,23 @@ const Canvas = () => {
 
   const createMissile = (x, y) => {
     setFired(fired +1);
-    setMissiles([...missiles, { x, y, width: 10, height: 20, color: 'red', velocity: attackSpeed, angle: attackAngle }]);
+    setMissiles([...missiles, new Missile( x, y, 10, 20, 'red', attackSpeed, attackAngle)]);
     fireDefenseMissile(); // Fire defense missile immediately
   };
 
   const fireDefenseMissile = () => {
-    const targetMissile = missiles[0]; // For simplicity, just targeting the first missile
-    if (!targetMissile || missiles.length === 0) return;
-
-    // Calculate angle between interceptor and target missile
-    const dx = targetMissile.x - (800 / 2);
-    const dy = targetMissile.y - (600 / 2);
 
     // Create defense missile with initial angle
-    const defenseMissile = {
-      x: 800 / 2,
-      y: 600 / 2,
-      width: 10,
-      height: 20,
-      color: 'blue',
-      angle: defenseAngle
-    };
+    let defenseMissile;
+    defenseMissile = new Missile(
+        800 / 2,
+        600 / 2,
+        10,
+        20,
+        'blue',
+        defenseSpeed,
+        defenseAngle,
+    );
 
     setDefenseMissiles([...defenseMissiles, defenseMissile]);
 
