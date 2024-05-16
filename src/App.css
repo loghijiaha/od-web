@@ -4,7 +4,7 @@
 
 .App-header {
   background-color: #282c34;
-  padding: 20px;
+  padding: 10px;
   color: white;
 }
 
@@ -19,6 +19,28 @@
   width: 5px;
   height: 10px;
   background-color: red;
+}
+
+.mode-switch {
+  position: absolute;
+  top: 30px;
+  right: 10px;
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 5px;
+  border-radius: 5px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.mode-switch label {
+  margin-left: 10px;
+  font-size: 16px;
+  color: #333;
+}
+
+.mode-switch .switch-label {
+  margin-right: 10px;
 }
 
 .interceptor {

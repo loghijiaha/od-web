@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import './App.css';
 import MissileCanvas from './components/MissileCanvas';
 import MissileControls from './components/MissileControls';
 import Missile from "./components/Missile";
 import Header from './components/Header';
+import config from "./config.json"
+import Switch from 'react-switch';
 
 const Canvas = () => {
   const [missiles, setMissiles] = useState([]);
@@ -14,6 +16,14 @@ const Canvas = () => {
   const [defenseSpeed, setDefenseSpeed] = useState(2);
   const [score, setScore] = useState(0);
   const [fired, setFired] = useState(0);
+  const [interceptors, setInterceptors] = useState([]);
+  const [autoMode, setAutoMode] = useState(true);
+
+  useEffect(() => {
+
+    setInterceptors(config.interceptors);
+
+  }, []);
 
   const handleCanvasClick = event => {
     const canvas = event.target;
@@ -26,31 +36,53 @@ const Canvas = () => {
   const createMissile = (x, y) => {
     setFired(fired +1);
     setMissiles([...missiles, new Missile( x, y, 10, 20, 'red', attackSpeed, attackAngle)]);
-    fireDefenseMissile(); // Fire defense missile immediately
+    interceptors && interceptors.forEach(interceptor => {
+
+      const misslie = fireDefenseMissile(interceptor, x, y);
+
+    });
   };
 
-  const fireDefenseMissile = () => {
+  const fireDefenseMissile = (interceptor, targetX, targetY) => {
+
+    const { interceptor_angle, interceptor_speed } = interceptor;
+    const { x, y } = interceptor.position;
 
     // Create defense missile with initial angle
-    let defenseMissile;
-    defenseMissile = new Missile(
-        800 / 2,
-        600 / 2,
+
+    const defenseMissile = new Missile(
+        x,
+        y,
         10,
         20,
         'blue',
-        defenseSpeed,
-        defenseAngle,
+        !autoMode ? defenseSpeed : interceptor_speed,
+        !autoMode ? defenseAngle : interceptor_angle,
     );
 
-    setDefenseMissiles([...defenseMissiles, defenseMissile]);
+    setDefenseMissiles(prevMissiles => [...prevMissiles, defenseMissile]);
 
   };
 
+  const handleModeToggle = () => {
+    setAutoMode(!autoMode);
+  };
 
   return (
       <div className="App">
         <Header score={score} fired={fired}/>
+        <div className="mode-switch">
+          <span className="switch-label">Auto Defence </span>
+          <Switch
+              onChange={handleModeToggle}
+              checked={autoMode}
+              offColor="#888"
+              onColor="#0f0"
+              checkedIcon={false}
+              uncheckedIcon={false}
+          />
+
+        </div>
         <MissileControls
             attackAngle={attackAngle}
             defenseAngle={defenseAngle}
@@ -61,10 +93,12 @@ const Canvas = () => {
             setAttackSpeed={setAttackSpeed}
             setDefenseSpeed={setDefenseSpeed}
         />
+
         <MissileCanvas
             handleCanvasClick={handleCanvasClick}
             missiles={missiles}
             defenseMissiles={defenseMissiles}
+            interceptors={interceptors}
             attackAngle={attackAngle}
             defenseAngle={defenseAngle}
             attackSpeed={attackSpeed}

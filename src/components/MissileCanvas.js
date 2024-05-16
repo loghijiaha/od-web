@@ -1,9 +1,10 @@
-import React, { useRef, useEffect } from 'react';
+import React, {useRef, useEffect} from 'react';
 
 const MissileCanvas = ({
                            handleCanvasClick,
                            missiles,
                            defenseMissiles,
+                           interceptors,
                            attackAngle,
                            defenseAngle,
                            attackSpeed,
@@ -14,7 +15,6 @@ const MissileCanvas = ({
                            setScore
                        }) => {
     const canvasRef = useRef(null);
-    const gravity = 0.1; // Adjust gravity strength as needed
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -25,10 +25,12 @@ const MissileCanvas = ({
             context.clearRect(0, 0, canvas.width, canvas.height);
 
             // Draw Defense Interceptor
-            context.fillStyle = 'yellow';
-            context.beginPath();
-            context.arc(canvas.width / 2, canvas.height / 2, 10, 0, Math.PI * 2);
-            context.fill();
+            interceptors && interceptors.forEach(interceptor => {
+                context.fillStyle = 'orange';
+                context.beginPath();
+                context.arc(interceptor.position.x, interceptor.position.y, 10, 0, Math.PI * 2);
+                context.fill();
+            });
 
             // Update and draw Defense Missiles
             for (let dIndex = defenseMissiles.length - 1; dIndex >= 0; dIndex--) {
