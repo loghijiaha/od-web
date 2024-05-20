@@ -4,8 +4,9 @@ import MissileCanvas from './components/MissileCanvas';
 import MissileControls from './components/MissileControls';
 import Missile from "./components/Missile";
 import Header from './components/Header';
-import config from "./config.json"
+// import config from "./config.json";
 import Switch from 'react-switch';
+import fetchConfig from "./rpc/od-sim-bff";
 
 const Canvas = () => {
   const [missiles, setMissiles] = useState([]);
@@ -19,12 +20,18 @@ const Canvas = () => {
   const [interceptors, setInterceptors] = useState([]);
   const [autoMode, setAutoMode] = useState(true);
 
-  useEffect(() => {
+  useEffect( () => {
 
-    setInterceptors(config.interceptors);
+     fetchData().then(r =>{});
 
   }, []);
 
+
+  async function fetchData() {
+    const config = await fetchConfig();
+    console.log(config);
+    setInterceptors(config.interceptors);
+  }
   const handleCanvasClick = event => {
     const canvas = event.target;
     const rect = canvas.getBoundingClientRect();

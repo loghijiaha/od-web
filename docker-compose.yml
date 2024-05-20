@@ -1,0 +1,14 @@
+version: '3.8'
+services:
+  envoy:
+    image: envoyproxy/envoy:v1.21.1
+    volumes:
+      - ./envoy.yaml:/etc/envoy/envoy.yaml
+    ports:
+      - "8080:8080"
+    command: /usr/local/bin/envoy -c /etc/envoy/envoy.yaml
+    networks:
+      - backend_network
+
+networks:
+  backend_network:
