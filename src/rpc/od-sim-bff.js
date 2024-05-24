@@ -3,9 +3,12 @@ import { ConfigRequest } from './generated/config_pb';
 
 const client = new ConfigServiceClient('http://localhost:8080');
 
-const fetchConfig = () => {
+const fetchConfig = (x, y) => {
     return new Promise((resolve, reject) => {
         const request = new ConfigRequest();
+        console.log(y);
+        request.setX(x);
+        request.setY(y);
 
         client.getConfig(request, {}, (err, response) => {
             if (err) {

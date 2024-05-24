@@ -22,13 +22,13 @@ const Canvas = () => {
 
   useEffect( () => {
 
-     fetchData().then(r =>{});
+     fetchData(0,0).then(r =>{});
 
   }, []);
 
 
-  async function fetchData() {
-    const config = await fetchConfig();
+  async function fetchData(x, y) {
+    const config = await fetchConfig(x, y);
     console.log(config);
     setInterceptors(config.interceptors);
   }
@@ -36,16 +36,17 @@ const Canvas = () => {
     const canvas = event.target;
     const rect = canvas.getBoundingClientRect();
     const x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
+    const y = Math.round(event.clientY - rect.top);
     createMissile(x, y);
   };
 
   const createMissile = (x, y) => {
     setFired(fired +1);
     setMissiles([...missiles, new Missile( x, y, 10, 20, 'red', attackSpeed, attackAngle)]);
+    fetchData(x,y).then(r =>{});
     interceptors && interceptors.forEach(interceptor => {
 
-      const misslie = fireDefenseMissile(interceptor, x, y);
+      interceptor?.isAutofire && fireDefenseMissile(interceptor, x, y);
 
     });
   };
