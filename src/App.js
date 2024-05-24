@@ -91,6 +91,7 @@ const Canvas = () => {
           />
 
         </div>
+        { !autoMode &&
         <MissileControls
             attackAngle={attackAngle}
             defenseAngle={defenseAngle}
@@ -101,7 +102,7 @@ const Canvas = () => {
             setAttackSpeed={setAttackSpeed}
             setDefenseSpeed={setDefenseSpeed}
         />
-
+        }
         <MissileCanvas
             handleCanvasClick={handleCanvasClick}
             missiles={missiles}
